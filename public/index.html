@@ -119,14 +119,10 @@ async function loadStock() {
       if (h !== lastMirageHash) { renderGrid('mirage-grid', data.mirage); lastMirageHash = h; }
     }
 
-    if (data.lastError) {
-      dot.classList.add('stale');
-      meta.innerHTML = `<span style="color:var(--err)">Source site unavailable: ${data.lastError}</span>`;
-    } else {
-      dot.classList.remove('stale');
-      const t = data.lastUpdated ? new Date(data.lastUpdated).toLocaleTimeString() : "unknown";
-      meta.textContent = `Last updated at ${t}`;
-    }
+    // Backend no longer returns `lastError`; consider fetch failures stale.
+    dot.classList.remove('stale');
+    const t = new Date().toLocaleTimeString();
+    meta.textContent = `Last updated at ${t}`;
   } catch (err) {
     dot.classList.add('stale');
     meta.textContent = `Couldn't reach backend API — retrying automatically…`;
@@ -164,7 +160,7 @@ function tickTimers() {
 tickTimers();
 setInterval(tickTimers, 1000);
 loadStock();
-setInterval(loadStock, 30000); // poll our own backend every 30s
+setInterval(loadStock, 5000); // poll our own backend every 5s for fastest updates
 </script>
 </body>
 </html>
