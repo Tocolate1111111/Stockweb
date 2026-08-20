@@ -33,15 +33,43 @@ app.get("/discord", (req, res) => {
 
 // webhook page removed from routing
 
-app.get("/api/stock", (req, res) => {
-  const cache = getCache();
-  res.json(cache);
+app.get("/api/stock", async (req, res) => {
+  // Fast path: return current cache immediately so UI isn't blocked by
+  // an external scrape. If cache is empty (first boot) we block and wait
+  // for a refresh so clients see data. Otherwise, trigger a background
+  // refresh when the cache is older than a short threshold.
+  const cache = getCache() || { normal: [], mirage: [], lastUpdated: null };
+
+  // If we have no data yet, wait for a refresh so the caller gets something.
+  if ((cache.normal.length === 0 && cache.mirage.length === 0)) {
+    try {
+      await refreshCache();
+    } catch (e) {}
+    const fresh = getCache();
+    const { lastUpdated, lastError, ...payload } = fresh || {};
+    return res.json(payload);
+  }
+
+  // Otherwise immediately return the cached payload (no lastUpdated/lastError)
+  const { lastUpdated, lastError, ...payload } = cache;
+  res.json(payload);
+
+  // Trigger a non-blocking refresh if the cache is stale.
+  const staleThresholdMs = 5000; // refresh in background if older than 5s
+  const last = cache.lastUpdated ? Date.parse(cache.lastUpdated) : 0;
+  if (!refreshInFlight && Date.now() - last > staleThresholdMs) {
+    safeRefresh();
+  }
 });
 
 // Manual trigger, useful for testing / a "refresh now" button.
 app.post("/api/stock/refresh", async (req, res) => {
-  await refreshCache();
-  res.json(getCache());
+  try {
+    await refreshCache();
+  } catch (e) {}
+  const cache = getCache();
+  const { lastUpdated, lastError, ...payload } = cache || {};
+  res.json(payload);
 });
 
 // webhook API endpoints removed
@@ -51,7 +79,6 @@ app.get("/health", (req, res) => {
   res.json({
     ok: true,
     lastUpdated: cache.lastUpdated,
-    lastError: cache.lastError,
   });
 });
 

@@ -159,7 +159,6 @@ async function scrapeStockFromPage(sourceUrl) {
         const slug = href.split("/items/")[1]?.replace(/\/$/, "");
         sections[currentSection].push({
           slug,
-          url: href.startsWith("http") ? href : `https://fruityblox.com${href}`,
           ...parsed,
         });
       }
