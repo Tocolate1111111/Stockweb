@@ -1,3 +1,4 @@
+const fs = require("fs");
 const path = require("path");
 const express = require("express");
 const cors = require("cors");
@@ -6,10 +7,16 @@ const { refreshCache, getCache } = require("./scraper");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// Webhook functionality removed — simplify server configuration
+
 // Refresh every 5 seconds for faster updates during testing / quick monitoring.
 const REFRESH_CRON = process.env.REFRESH_CRON || "*/5 * * * * *";
 
+
+// All webhook/account persistence and sending logic removed.
+
 app.use(cors());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.get("/", (req, res) => {
@@ -24,6 +31,8 @@ app.get("/discord", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "discord.html"));
 });
 
+// webhook page removed from routing
+
 app.get("/api/stock", (req, res) => {
   const cache = getCache();
   res.json(cache);
@@ -34,6 +43,8 @@ app.post("/api/stock/refresh", async (req, res) => {
   await refreshCache();
   res.json(getCache());
 });
+
+// webhook API endpoints removed
 
 app.get("/health", (req, res) => {
   const cache = getCache();
