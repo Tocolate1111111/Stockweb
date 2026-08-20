@@ -1,0 +1,21 @@
+{
+  "name": "bloxfruits-stock-app",
+  "version": "1.0.0",
+  "description": "Backend that scrapes fruityblox.com/stock and serves it as a JSON API + frontend, styled like the original site.",
+  "main": "server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.7",
+    "cheerio": "^1.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "node-cron": "^3.0.3"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
