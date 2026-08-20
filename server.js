@@ -25,11 +25,46 @@ app.post("/api/stock/refresh", async (req, res) => {
   res.json(getCache());
 });
 
-app.get("/health", (req, res) => res.json({ ok: true }));
+app.get("/health", (req, res) => {
+  const cache = getCache();
+  res.json({
+    ok: true,
+    lastUpdated: cache.lastUpdated,
+    lastError: cache.lastError,
+  });
+});
+
+// Keep the process alive even if a scrape throws something unexpected —
+// otherwise one bad cycle could kill auto-refresh entirely.
+process.on("unhandledRejection", (err) => {
+  console.error("[unhandledRejection] auto-refresh kept alive:", err);
+});
+process.on("uncaughtException", (err) => {
+  console.error("[uncaughtException] auto-refresh kept alive:", err);
+});
+
+let refreshInFlight = false;
+async function safeRefresh() {
+  if (refreshInFlight) {
+    console.log("[scraper] previous refresh still running, skipping this tick");
+    return;
+  }
+  refreshInFlight = true;
+  try {
+    await refreshCache();
+  } catch (err) {
+    // refreshCache already catches its own errors into cache.lastError,
+    // this is just a final safety net so the cron job itself never dies.
+    console.error("[scraper] unexpected error during refresh:", err);
+  } finally {
+    refreshInFlight = false;
+  }
+}
 
 app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  await refreshCache(); // populate cache immediately on boot
-  cron.schedule(REFRESH_CRON, refreshCache);
-  console.log(`Scraper scheduled: "${REFRESH_CRON}"`);
+  await safeRefresh(); // populate cache immediately on boot
+  cron.schedule(REFRESH_CRON, safeRefresh);
+  console.log(`Auto-refresh scheduled: "${REFRESH_CRON}" (every 5 minutes by default)`);
 });
+
