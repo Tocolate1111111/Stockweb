@@ -1,5 +1,3 @@
-// Maps fruit name (lowercase) -> real icon URL, sourced directly from
-// fruityblox.com's Discord CDN emoji assets.
 const FRUIT_ICONS = {
   "rocket": "https://cdn.discordapp.com/emojis/1196031892747718666.webp?size=40",
   "spin": "https://cdn.discordapp.com/emojis/1196031932090306600.webp?size=40",
