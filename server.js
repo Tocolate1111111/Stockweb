@@ -6,13 +6,23 @@ const { refreshCache, getCache } = require("./scraper");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-// How often to re-scrape fruityblox.com. Their Normal stock rotates
-// every 4h and Mirage every 2h, so every 5 minutes is more than
-// enough to catch a change quickly without hammering their server.
-const REFRESH_CRON = process.env.REFRESH_CRON || "*/5 * * * *";
+// Refresh every 5 seconds for faster updates during testing / quick monitoring.
+const REFRESH_CRON = process.env.REFRESH_CRON || "*/5 * * * * *";
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/stock", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
+
+app.get("/discord", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "discord.html"));
+});
 
 app.get("/api/stock", (req, res) => {
   const cache = getCache();
@@ -65,6 +75,6 @@ app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
   await safeRefresh(); // populate cache immediately on boot
   cron.schedule(REFRESH_CRON, safeRefresh);
-  console.log(`Auto-refresh scheduled: "${REFRESH_CRON}" (every 5 minutes by default)`);
+  console.log(`Auto-refresh scheduled: "${REFRESH_CRON}" (every 5 seconds by default)`);
 });
 
