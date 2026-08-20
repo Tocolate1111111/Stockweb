@@ -6,12 +6,18 @@
 <title>Blox Fruits Stock Right Now</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="icons.js"></script>
 <style>
   :root{
-    --bg:#0A0E1A; --panel:#121729; --line:#232B48;
-    --text:#E9ECF7; --muted:#8B93B0;
-    --natural:#7CFF6B; --elemental:#4AD4FF; --gold:#FFD24A; --robux:#B98CFF; --err:#FF6B6B;
+    --bg:#0A0E1A;
+    --panel:#121729;
+    --panel-2:#161C33;
+    --line:#232B48;
+    --text:#E9ECF7;
+    --muted:#8B93B0;
+    --natural:#7CFF6B;
+    --elemental:#4AD4FF;
+    --gold:#FFD24A;
+    --robux:#B98CFF;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
@@ -19,190 +25,295 @@
       radial-gradient(circle at 15% 0%, rgba(124,255,107,0.08), transparent 40%),
       radial-gradient(circle at 85% 20%, rgba(74,212,255,0.10), transparent 40%),
       var(--bg);
-    color:var(--text); font-family:'Space Grotesk', sans-serif; min-height:100vh; padding-bottom:60px;
+    color:var(--text);
+    font-family:'Space Grotesk', sans-serif;
+    min-height:100vh;
+    padding-bottom:60px;
   }
   .pixel{font-family:'Press Start 2P', monospace;}
-  header{display:flex;align-items:center;justify-content:space-between;padding:22px 40px;border-bottom:1px solid var(--line);position:sticky;top:0;background:rgba(10,14,26,0.85);backdrop-filter:blur(10px);z-index:10;}
+
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 40px;
+    border-bottom:1px solid var(--line);
+    position:sticky;top:0;
+    background:rgba(10,14,26,0.85);
+    backdrop-filter:blur(10px);
+    z-index:10;
+  }
   .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;}
-  .logo-mark{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,var(--natural),var(--elemental));display:flex;align-items:center;justify-content:center;font-size:16px;}
+  .logo-mark{
+    width:30px;height:30px;border-radius:8px;
+    background:linear-gradient(135deg,var(--natural),var(--elemental));
+    display:flex;align-items:center;justify-content:center;
+    font-size:16px;
+  }
   nav{display:flex;gap:28px;align-items:center;}
-  nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;}
+  nav a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:500;transition:color .15s;}
+  nav a:hover{color:var(--text);}
   nav a.active{color:var(--natural);}
-  .refresh-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;}
-  .refresh-btn:hover{border-color:var(--natural);}
+  .signin{
+    display:flex;align-items:center;gap:8px;
+    padding:9px 16px;border-radius:8px;
+    border:1px solid var(--line);
+    color:var(--text);font-size:13px;font-weight:600;
+    cursor:pointer;
+  }
+
   .hero{padding:56px 40px 30px;max-width:1100px;margin:0 auto;}
-  .eyebrow{color:var(--natural);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+  .eyebrow{
+    color:var(--natural);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    font-weight:700;margin-bottom:14px;
+  }
   h1.pixel{font-size:26px;line-height:1.5;margin-bottom:16px;}
   .hero p{color:var(--muted);font-size:15px;max-width:640px;line-height:1.6;}
-  .live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--natural);box-shadow:0 0 8px var(--natural);animation:pulse 1.6s infinite;margin-right:8px;}
-  .live-dot.stale{background:var(--err);box-shadow:0 0 8px var(--err);}
+
+  .live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--natural);
+    box-shadow:0 0 8px var(--natural);animation:pulse 1.6s infinite;margin-right:8px;}
   @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
-  .meta-line{color:var(--muted);font-size:12px;margin-top:10px;}
+
   .section-wrap{max-width:1100px;margin:0 auto;padding:0 40px;}
   .dealer-section{margin-top:48px;}
-  .dealer-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line);}
+  .dealer-head{
+    display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;
+    margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid var(--line);
+  }
   .dealer-title{display:flex;align-items:center;gap:14px;}
   .dealer-title h2{font-size:22px;font-weight:700;}
-  .tag{font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.05em;}
+  .tag{
+    font-size:11px;font-weight:700;padding:4px 10px;border-radius:20px;
+    text-transform:uppercase;letter-spacing:.05em;
+  }
   .tag.normal{background:rgba(124,255,107,0.12);color:var(--natural);border:1px solid rgba(124,255,107,0.3);}
   .tag.mirage{background:rgba(74,212,255,0.12);color:var(--elemental);border:1px solid rgba(74,212,255,0.3);}
-  .countdown-box{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);padding:10px 18px;border-radius:12px;}
+
+  .countdown-box{
+    display:flex;align-items:center;gap:12px;
+    background:var(--panel);border:1px solid var(--line);
+    padding:10px 18px;border-radius:12px;
+  }
   .countdown-box .label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;}
   .countdown-box .timer{font-family:'Press Start 2P',monospace;font-size:15px;color:var(--gold);}
-  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;}
-  .fruit-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;position:relative;overflow:hidden;transition:transform .18s, border-color .18s;}
+
+  .grid{
+    display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:16px;
+  }
+  .fruit-card{
+    background:var(--panel);border:1px solid var(--line);border-radius:14px;
+    padding:18px;position:relative;overflow:hidden;
+    transition:transform .18s, border-color .18s;
+  }
   .fruit-card:hover{transform:translateY(-3px);border-color:var(--natural);}
-  .fruit-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+  .fruit-card::before{
+    content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  }
   .fruit-card.rarity-natural::before{background:var(--natural);}
   .fruit-card.rarity-elemental::before{background:var(--elemental);}
-  .fruit-card.rarity-other::before{background:var(--robux);}
-  .fruit-icon{width:46px;height:46px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;background:rgba(255,255,255,0.06);overflow:hidden;}
-  .fruit-icon img{width:32px;height:32px;object-fit:contain;image-rendering:-webkit-optimize-contrast;}
+
+  .fruit-icon{
+    width:46px;height:46px;border-radius:10px;
+    display:flex;align-items:center;justify-content:center;font-size:22px;
+    margin-bottom:14px;overflow:hidden;
+  }
+  .fruit-card.rarity-natural .fruit-icon{background:rgba(124,255,107,0.12);}
+  .fruit-card.rarity-elemental .fruit-icon{background:rgba(74,212,255,0.12);}
+
   .fruit-name{font-size:16px;font-weight:700;margin-bottom:4px;}
   .fruit-type{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px;}
+
   .price-row{display:flex;flex-direction:column;gap:6px;font-size:13px;}
   .price{display:flex;align-items:center;justify-content:space-between;}
   .price .amt-beli{color:var(--gold);font-weight:700;}
   .price .amt-robux{color:var(--robux);font-weight:700;}
   .price .k{color:var(--muted);font-size:11px;}
-  .empty-state, .error-state{color:var(--muted);font-size:14px;padding:24px;border:1px dashed var(--line);border-radius:12px;}
-  .error-state{color:var(--err);border-color:rgba(255,107,107,0.3);}
-  footer{max-width:1100px;margin:70px auto 0;padding:24px 40px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;color:var(--muted);font-size:13px;}
-  @media (max-width:640px){header{padding:16px 20px;}nav{display:none;}.hero{padding:36px 20px 20px;}.section-wrap{padding:0 20px;}h1.pixel{font-size:18px;}}
+
+  footer{
+    max-width:1100px;margin:70px auto 0;padding:24px 40px;
+    border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;
+    color:var(--muted);font-size:13px;
+  }
+  footer a{color:var(--muted);text-decoration:none;margin-left:18px;}
+  footer a:hover{color:var(--text);}
+
+  @media (max-width:640px){
+    header{padding:16px 20px;}
+    nav{display:none;}
+    .hero{padding:36px 20px 20px;}
+    .section-wrap{padding:0 20px;}
+    h1.pixel{font-size:18px;}
+  }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo"><div class="logo-mark">🍈</div>FruityBlox Mirror</div>
-  <nav><a href="#">Browse Trades</a><a href="#">Post Trade</a><a href="#" class="active">Stock</a><a href="#">Discord</a></nav>
-  <button class="refresh-btn" id="refresh-btn">Refresh now</button>
+  <div class="logo"><div class="logo-mark">🍈</div>Blox Stock</div>
+  <nav>
+    <a href="#">Browse Trades</a>
+    <a href="#">Post Trade</a>
+    <a href="#" class="active">Stock</a>
+    <a href="#">Discord</a>
+  </nav>
+  <div class="signin">Sign In</div>
 </header>
 
 <div class="hero">
-  <div class="eyebrow"><span class="live-dot" id="live-dot"></span>Live tracker — mirrored from fruityblox.com</div>
+  <div class="eyebrow"><span class="live-dot"></span>Live tracker</div>
   <h1 class="pixel">Blox Fruits Stock<br>Right Now</h1>
-  <p>This page's backend re-scrapes fruityblox.com/stock every few minutes and caches the result, so what you see below is a live mirror of the real stock — Normal rotates every 4 hours, Mirage every 2.</p>
-  <div class="meta-line" id="meta-line">Loading stock…</div>
+  <p>Live Blox Fruits stock for Normal and Mirage dealers. Updates automatically every 4 and 2 hours respectively. Check back before each rotation to catch rare fruits when they appear.</p>
 </div>
 
 <div class="section-wrap">
+
   <div class="dealer-section">
     <div class="dealer-head">
-      <div class="dealer-title"><h2>Normal</h2><span class="tag normal">4h rotation</span></div>
-      <div class="countdown-box"><span class="label">Next reset</span><span class="timer" id="normal-timer">--:--:--</span></div>
+      <div class="dealer-title">
+        <h2>Normal</h2>
+        <span class="tag normal">4h rotation</span>
+      </div>
+      <div class="countdown-box">
+        <span class="label">Next reset</span>
+        <span class="timer" id="normal-timer">--:--:--</span>
+      </div>
     </div>
-    <div class="grid" id="normal-grid"><div class="empty-state">Loading…</div></div>
+    <div class="grid" id="normal-grid"></div>
   </div>
 
   <div class="dealer-section">
     <div class="dealer-head">
-      <div class="dealer-title"><h2>Mirage</h2><span class="tag mirage">2h rotation</span></div>
-      <div class="countdown-box"><span class="label">Next reset</span><span class="timer" id="mirage-timer">--:--:--</span></div>
+      <div class="dealer-title">
+        <h2>Mirage</h2>
+        <span class="tag mirage">2h rotation</span>
+      </div>
+      <div class="countdown-box">
+        <span class="label">Next reset</span>
+        <span class="timer" id="mirage-timer">--:--:--</span>
+      </div>
     </div>
-    <div class="grid" id="mirage-grid"><div class="empty-state">Loading…</div></div>
+    <div class="grid" id="mirage-grid"></div>
   </div>
+
 </div>
 
 <footer>
-  <div>Unofficial mirror — not affiliated with fruityblox.com</div>
+  <div>© 2026 Blox Stock</div>
+  <div><a href="#">Privacy Policy</a><a href="#">Terms of Service</a></div>
 </footer>
 
 <script>
-// Same-origin by default. If you host the frontend separately from the
-// backend, change this to your backend's full URL, e.g.
-// const API_BASE = "https://your-backend.onrender.com";
-const API_BASE = "";
+const FRUIT_ICONS = {
+  "rocket":"https://cdn.discordapp.com/emojis/1196031892747718666.webp?size=40",
+  "spin":"https://cdn.discordapp.com/emojis/1196031932090306600.webp?size=40",
+  "blade":"https://cdn.discordapp.com/emojis/1196031811164323870.webp?size=40",
+  "spring":"https://cdn.discordapp.com/emojis/1196031938885062686.webp?size=40",
+  "bomb":"https://cdn.discordapp.com/emojis/1196031797339893770.webp?size=40",
+  "smoke":"https://cdn.discordapp.com/emojis/1196031913723445398.webp?size=40",
+  "spike":"https://cdn.discordapp.com/emojis/1196031928244117514.webp?size=40",
+  "flame":"https://cdn.discordapp.com/emojis/1196031835013120060.webp?size=40",
+  "ice":"https://cdn.discordapp.com/emojis/1196031847126286446.webp?size=40",
+  "sand":"https://cdn.discordapp.com/emojis/1196031902709194752.webp?size=40",
+  "dark":"https://cdn.discordapp.com/emojis/1196031815635435580.webp?size=40",
+  "eagle":"https://cdn.discordapp.com/emojis/1539655641814278395.webp?size=40",
+  "diamond":"https://cdn.discordapp.com/emojis/1196031818965725234.webp?size=40",
+  "light":"https://cdn.discordapp.com/emojis/1196031863412752384.webp?size=40",
+  "rubber":"https://cdn.discordapp.com/emojis/1196031896275128330.webp?size=40",
+  "ghost":"https://cdn.discordapp.com/emojis/1196031839454892112.webp?size=40",
+  "magma":"https://cdn.discordapp.com/emojis/1196031869620330597.webp?size=40",
+  "quake":"https://cdn.discordapp.com/emojis/1196031890449240155.webp?size=40",
+  "buddha":"https://cdn.discordapp.com/emojis/1196031800775024701.webp?size=40",
+  "love":"https://cdn.discordapp.com/emojis/1196031865388277821.webp?size=40",
+  "creation":"https://cdn.discordapp.com/emojis/1539655615272714350.webp?size=40",
+  "spider":"https://cdn.discordapp.com/emojis/1196031923999481886.webp?size=40",
+  "sound":"https://cdn.discordapp.com/emojis/1196031921847816212.webp?size=40",
+  "phoenix":"https://cdn.discordapp.com/emojis/1196031886393344040.webp?size=40",
+  "portal":"https://cdn.discordapp.com/emojis/1196031880710070302.webp?size=40",
+  "lightning":"https://cdn.discordapp.com/emojis/1539655762589261824.webp?size=40",
+  "pain":"https://cdn.discordapp.com/emojis/1196031876134096957.webp?size=40",
+  "blizzard":"https://cdn.discordapp.com/emojis/1196031795095928863.webp?size=40",
+  "gravity":"https://cdn.discordapp.com/emojis/1196031844634869862.webp?size=40",
+  "mammoth":"https://cdn.discordapp.com/emojis/1196031873579765810.webp?size=40",
+  "t-rex":"https://cdn.discordapp.com/emojis/1196031947340787722.webp?size=40",
+  "dough":"https://cdn.discordapp.com/emojis/1196031821813653504.webp?size=40",
+  "shadow":"https://cdn.discordapp.com/emojis/1196031908358914119.webp?size=40",
+  "venom":"https://cdn.discordapp.com/emojis/1539655817773580299.webp?size=40",
+  "gas":"https://cdn.discordapp.com/emojis/1539655720465604638.webp?size=40",
+  "spirit":"https://cdn.discordapp.com/emojis/1196031934988558386.webp?size=40",
+  "tiger":"https://cdn.discordapp.com/emojis/1539655782738428045.webp?size=40",
+  "yeti":"https://cdn.discordapp.com/emojis/1539655837969154078.webp?size=40",
+  "kitsune":"https://cdn.discordapp.com/emojis/1539655744377458708.webp?size=40",
+  "control":"https://cdn.discordapp.com/emojis/1539655586562711612.webp?size=40",
+  "dragon":"https://cdn.discordapp.com/emojis/1539653074774265967.webp?size=40"
+};
 
-const typeEmoji = { Natural: "🍏", Elemental: "⚡", Beast: "🐾", Legendary: "🌟", Mythical: "✨" };
+const normalFruits = [
+  {name:"Rocket", type:"Natural", beli:"5,000", robux:50},
+  {name:"Spin", type:"Natural", beli:"7,500", robux:75},
+  {name:"Bomb", type:"Natural", beli:"80,000", robux:220},
+  {name:"Smoke", type:"Elemental", beli:"100,000", robux:250},
+  {name:"Creation", type:"Natural", beli:"1,400,000", robux:1750},
+  {name:"Pain", type:"Natural", beli:"2,300,000", robux:2200},
+];
 
-function iconFor(fruitName) {
-  const url = FRUIT_ICONS[(fruitName || "").toLowerCase()];
-  const fallback = typeEmoji["Natural"];
+const mirageFruits = [
+  {name:"Rocket", type:"Natural", beli:"5,000", robux:50},
+  {name:"Spin", type:"Natural", beli:"7,500", robux:75},
+  {name:"Flame", type:"Elemental", beli:"250,000", robux:550},
+  {name:"Ice", type:"Elemental", beli:"350,000", robux:750},
+  {name:"Dark", type:"Elemental", beli:"500,000", robux:950},
+  {name:"Light", type:"Elemental", beli:"650,000", robux:1100},
+  {name:"Love", type:"Natural", beli:"1,300,000", robux:1700},
+];
+
+function iconFor(name){
+  const url = FRUIT_ICONS[(name||"").toLowerCase()];
+  const fallback = "🍎";
   return url
-    ? `<img src="${url}" alt="${fruitName}" referrerpolicy="no-referrer" loading="lazy" onerror="this.outerHTML='${fallback}'">`
+    ? `<img src="${url}" alt="${name}" referrerpolicy="no-referrer" loading="lazy" style="width:32px;height:32px;object-fit:contain;" onerror="this.outerHTML='${fallback}'">`
     : fallback;
 }
 
-function renderGrid(containerId, fruits) {
+function renderGrid(containerId, fruits){
   const el = document.getElementById(containerId);
-  if (!fruits || fruits.length === 0) {
-    el.innerHTML = `<div class="empty-state">No stock data yet — the backend may still be doing its first scrape.</div>`;
-    return;
-  }
-  el.innerHTML = fruits.map(f => {
-    const rarityClass = ["Natural","Elemental"].includes(f.type) ? f.type.toLowerCase() : "other";
-    return `
-      <a class="fruit-card rarity-${rarityClass}" href="${f.url}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit;">
-        <div class="fruit-icon">${iconFor(f.name)}</div>
-        <div class="fruit-name">${f.name}</div>
-        <div class="fruit-type">${f.type}</div>
-        <div class="price-row">
-          <div class="price"><span class="k">Beli</span><span class="amt-beli">${f.beli ?? "—"}</span></div>
-          <div class="price"><span class="k">Robux</span><span class="amt-robux">${f.robux ? "R " + f.robux : "—"}</span></div>
-        </div>
-      </a>`;
-  }).join('');
+  el.innerHTML = fruits.map(f => `
+    <div class="fruit-card rarity-${f.type.toLowerCase()}">
+      <div class="fruit-icon">${iconFor(f.name)}</div>
+      <div class="fruit-name">${f.name}</div>
+      <div class="fruit-type">${f.type}</div>
+      <div class="price-row">
+        <div class="price"><span class="k">Beli</span><span class="amt-beli">${f.beli}</span></div>
+        <div class="price"><span class="k">Robux</span><span class="amt-robux">${f.robux}</span></div>
+      </div>
+    </div>
+  `).join('');
 }
 
-async function loadStock() {
-  const dot = document.getElementById('live-dot');
-  const meta = document.getElementById('meta-line');
-  try {
-    const res = await fetch(`${API_BASE}/api/stock`);
-    const data = await res.json();
+renderGrid('normal-grid', normalFruits);
+renderGrid('mirage-grid', mirageFruits);
 
-    renderGrid('normal-grid', data.normal);
-    renderGrid('mirage-grid', data.mirage);
-
-    if (data.lastError) {
-      dot.classList.add('stale');
-      meta.innerHTML = `<span style="color:var(--err)">Scraper warning: ${data.lastError}</span>`;
-    } else {
-      dot.classList.remove('stale');
-      const t = data.lastUpdated ? new Date(data.lastUpdated).toLocaleTimeString() : "unknown";
-      meta.textContent = `Last synced from fruityblox.com at ${t}`;
-    }
-  } catch (err) {
-    dot.classList.add('stale');
-    meta.textContent = `Couldn't reach backend API — is the server running?`;
-    document.getElementById('normal-grid').innerHTML = `<div class="error-state">Failed to load stock: ${err.message}</div>`;
-    document.getElementById('mirage-grid').innerHTML = `<div class="error-state">Failed to load stock: ${err.message}</div>`;
-  }
-}
-
-document.getElementById('refresh-btn').addEventListener('click', async () => {
-  const meta = document.getElementById('meta-line');
-  meta.textContent = 'Refreshing from fruityblox.com…';
-  try {
-    await fetch(`${API_BASE}/api/stock/refresh`, { method: 'POST' });
-  } catch (e) {}
-  loadStock();
-});
-
-function formatTime(ms) {
-  if (ms < 0) ms = 0;
+function formatTime(ms){
+  if(ms < 0) ms = 0;
   const h = Math.floor(ms / 3600000);
   const m = Math.floor((ms % 3600000) / 60000);
   const s = Math.floor((ms % 60000) / 1000);
-  return [h, m, s].map(v => String(v).padStart(2, '0')).join(':');
+  return [h,m,s].map(v => String(v).padStart(2,'0')).join(':');
 }
-function nextRotation(hours) {
+
+function nextRotation(hours){
   const now = new Date();
   const msInCycle = hours * 3600000;
   const epoch = Math.floor(now.getTime() / msInCycle) * msInCycle;
   return epoch + msInCycle;
 }
-function tickTimers() {
+
+function tick(){
   const now = Date.now();
   document.getElementById('normal-timer').textContent = formatTime(nextRotation(4) - now);
   document.getElementById('mirage-timer').textContent = formatTime(nextRotation(2) - now);
 }
-
-tickTimers();
-setInterval(tickTimers, 1000);
-loadStock();
-setInterval(loadStock, 30000); // poll our own backend every 30s
+tick();
+setInterval(tick, 1000);
 </script>
+
 </body>
 </html>
