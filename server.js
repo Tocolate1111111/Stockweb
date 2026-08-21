@@ -9,8 +9,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 // Webhook functionality removed — simplify server configuration
 
-// Refresh every 5 seconds for faster updates during testing / quick monitoring.
-const REFRESH_CRON = process.env.REFRESH_CRON || "*/5 * * * * *";
+// Refresh at a calmer cadence to avoid hammering the upstream site and
+// drifting away from the source web's real update rhythm.
+const REFRESH_CRON = process.env.REFRESH_CRON || "*/30 * * * * *";
 
 
 // All webhook/account persistence and sending logic removed.
@@ -54,8 +55,8 @@ app.get("/api/stock", async (req, res) => {
   const { lastUpdated, lastError, ...payload } = cache;
   res.json(payload);
 
-  // Trigger a non-blocking refresh if the cache is stale.
-  const staleThresholdMs = 5000; // refresh in background if older than 5s
+  // Trigger a non-blocking refresh only if the cache is meaningfully stale.
+  const staleThresholdMs = 30000; // 30s is a safer interval for source sync
   const last = cache.lastUpdated ? Date.parse(cache.lastUpdated) : 0;
   if (!refreshInFlight && Date.now() - last > staleThresholdMs) {
     safeRefresh();
@@ -113,6 +114,6 @@ app.listen(PORT, async () => {
   console.log(`Server running on http://localhost:${PORT}`);
   await safeRefresh(); // populate cache immediately on boot
   cron.schedule(REFRESH_CRON, safeRefresh);
-  console.log(`Auto-refresh scheduled: "${REFRESH_CRON}" (every 5 seconds by default)`);
+  console.log(`Auto-refresh scheduled: "${REFRESH_CRON}" (every 30 seconds by default)`);
 });
 
