@@ -35,28 +35,26 @@ app.get("/discord", (req, res) => {
 // webhook page removed from routing
 
 app.get("/api/stock", async (req, res) => {
-  // Fast path: return current cache immediately so UI isn't blocked by
-  // an external scrape. If cache is empty (first boot) we block and wait
-  // for a refresh so clients see data. Otherwise, trigger a background
-  // refresh when the cache is older than a short threshold.
+  const forceFresh = String(req.query.fresh || "") === "1";
   const cache = getCache() || { normal: [], mirage: [], lastUpdated: null };
 
-  // If we have no data yet, wait for a refresh so the caller gets something.
-  if ((cache.normal.length === 0 && cache.mirage.length === 0)) {
+  const buildPayload = (source) => {
+    const { lastUpdated, lastError, ...rest } = source || {};
+    return { ...rest };
+  };
+
+  if (forceFresh || (cache.normal.length === 0 && cache.mirage.length === 0)) {
     try {
       await refreshCache();
     } catch (e) {}
-    const fresh = getCache();
-    const { lastUpdated, lastError, ...payload } = fresh || {};
-    return res.json(payload);
+    return res.json(buildPayload(getCache()));
   }
 
-  // Otherwise immediately return the cached payload (no lastUpdated/lastError)
-  const { lastUpdated, lastError, ...payload } = cache;
+  res.setHeader("Cache-Control", "no-store");
+  const payload = buildPayload(cache);
   res.json(payload);
 
-  // Trigger a non-blocking refresh only if the cache is meaningfully stale.
-  const staleThresholdMs = 30000; // 30s is a safer interval for source sync
+  const staleThresholdMs = 30000;
   const last = cache.lastUpdated ? Date.parse(cache.lastUpdated) : 0;
   if (!refreshInFlight && Date.now() - last > staleThresholdMs) {
     safeRefresh();
@@ -69,17 +67,20 @@ app.post("/api/stock/refresh", async (req, res) => {
     await refreshCache();
   } catch (e) {}
   const cache = getCache();
-  const { lastUpdated, lastError, ...payload } = cache || {};
-  res.json(payload);
+  const { lastUpdated, lastError, ...rest } = cache || {};
+  res.json({ ...rest });
 });
 
 // webhook API endpoints removed
 
 app.get("/health", (req, res) => {
   const cache = getCache();
+  const ageMs = cache && cache.lastUpdated ? Date.now() - Date.parse(cache.lastUpdated) : Number.POSITIVE_INFINITY;
   res.json({
     ok: true,
-    lastUpdated: cache.lastUpdated,
+    hasData: !!(cache && cache.normal && cache.normal.length > 0) || !!(cache && cache.mirage && cache.mirage.length > 0),
+    ageMs,
+    isStale: !cache || !cache.lastUpdated || ageMs > 60000,
   });
 });
 
